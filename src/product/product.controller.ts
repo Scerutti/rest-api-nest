@@ -1,6 +1,9 @@
 import { Controller , Post , Get, Put , Delete, Res , HttpStatus , Body, Param, NotFoundException, Query} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateProductDTO } from './dto/product.dto';
 import { ProductService } from './product.service';
+
+@ApiTags('products')
 @Controller('product')
 export class ProductController {
 
