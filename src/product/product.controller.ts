@@ -17,12 +17,12 @@ export class ProductController {
 
     @Get('/')
     async getProducts(@Res() res){
-        const products = await this.productService.getProducts();
+        const products = await this.productService.getAllProducts();
         return res.status(HttpStatus.OK).json( products )
     }
     @Get('/:productId')
     async getProduct(@Res() res, @Param('productId') productId){
-        const product = await this.productService.getProduct(productId);
+        const product = await this.productService.getOneProduct(productId);
         
         if(!product) throw new NotFoundException('Product does not exist');
 
@@ -31,7 +31,7 @@ export class ProductController {
     
     @Delete('/delete')
     async deleteProduct(@Res() res, @Query('productId') productId){
-        const deleteProduct = await this.productService.deleteProduct(productId) 
+        const deleteProduct = await this.productService.deleteOneProduct(productId) 
         if(!deleteProduct) throw new NotFoundException('Product does not exist');
 
         return res.status(HttpStatus.OK).json( {
@@ -40,9 +40,9 @@ export class ProductController {
         } )
     }
 
-    @Post('/update')
-    async updateProduct (@Res() res, @Body() createProductDTO: CreateProductDTO, @Query('productID') productID){
-        const updatedProduct = await this.productService.updateProduct(productID,createProductDTO);
+    @Put('/update')
+    async updateProduct (@Res() res, @Body() createProductDTO: CreateProductDTO, @Query('productID') productID:string){
+        const updatedProduct = await this.productService.updateProductDTO(productID,createProductDTO);
         if(!updatedProduct) throw new NotFoundException('Product does not exist');
         
         return res.status(HttpStatus.OK).json({

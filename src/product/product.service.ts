@@ -2,18 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { Product } from './interfaces/product.interface';
+import { Products, ProductDocument } from './schemas/product.schema';
 import { CreateProductDTO } from './dto/product.dto';
 @Injectable()
 export class ProductService {
 
-    constructor(@InjectModel('Product') private readonly productModel: Model<Product> ){}
+    constructor(@InjectModel(Products.name) private productModel: Model<ProductDocument> ){}
     //Metodo sensillo para realizar una busqueda en nuestra base de datos, retornando un Array de productos
-        async getProducts(): Promise<Product[]> {
+        async getAllProducts(): Promise<Product[]> {
             const products = await this.productModel.find();
             return products;
         }
     //Metodo para realizar una busqueda por ID en nuestra DB
-        async getProduct(productID:string): Promise<Product> {
+        async getOneProduct(productID:string): Promise<Product> {
             const product = await this.productModel.findById(productID);
             return product;
         }
@@ -23,12 +24,12 @@ export class ProductService {
             return await product.save();
         }
     //Metodo para eliminar un elemento de nuetra tabla
-        async deleteProduct(productID: string): Promise<Product>{
-            const deletedProduct = await this.productModel.findByIdAndDelete(productID)
+        async deleteOneProduct(productID: string): Promise<Product>{           
+            const deletedProduct = await this.productModel.findByIdAndRemove({_id: productID}).exec();
             return deletedProduct;
         }
     //Metodo para actualizar y MOSTRAR el elemento actualizado
-        async updateProduct(productID: string, createProductDTO: CreateProductDTO): Promise<Product> {
+        async updateProductDTO(productID: string, createProductDTO: CreateProductDTO): Promise<Product> {
             const updatedProduct = await this.productModel.findByIdAndUpdate(productID,createProductDTO, { new: true });
             return updatedProduct;
         }
