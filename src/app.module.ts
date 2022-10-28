@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     ProductModule,
-    MongooseModule.forRoot('mongodb://localhost/product-rest-api')
+    MongooseModule.forRoot('mongodb+srv://scerutti:WFQJspZaOCYREJCY@cluster0.ezi1rja.mongodb.net/products')
   ],
   controllers: [AppController],
   providers: [AppService],
